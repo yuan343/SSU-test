@@ -47,19 +47,63 @@ with t4:
     st.subheader("🤖 文件命名标准化")
     st.write("请将文件重命名为以下格式后再归档：")
     st.code("项目名_中心号_文件类型_版本_日期.pdf", language="text")
-with st.expander("💰 受试者费用一键试算 (分中心自助版)"):
-    st.write("请在下方输入贵中心的医疗项目单价：")
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        price_lab = st.number_input("单次血常规+生化单价 (元)", value=300)
-        price_ct = st.number_input("单次增强CT (多部位) 单价 (元)", value=1200)
-    with col2:
-        price_ecg = st.number_input("单次心电图单价 (元)", value=40)
-        price_biopsy = st.number_input("单次活检穿刺单价 (元)", value=1500)
+import streamlit as st
+import pandas as pd
 
-    # 自动计算逻辑 (按方案V6.0频次)
-    total_cost = (price_lab * 12) + (price_ct * 5) + (price_ecg * 18) + (price_biopsy * 2)
-    
-    st.markdown(f"### 预计单名受试者总检查费用: :red[¥ {total_cost:,.2f}]")
-    st.caption("注：计算逻辑基于方案V6.0预设频次：实验室12次、影像5次、心电图18次、活检2次。")
+st.set_page_config(page_title="IMM2510-002 费用测算工作台", layout="wide")
+
+st.title("💰 IMM2510-002 受试者检查费用全量试算表")
+st.info("说明：本表频次依据【方案 V6.0】剂量探索阶段（单人完成 8 周期治疗）测算。各中心可根据物价局单价自行调整。")
+
+# 1. 建立基础数据（全量项目 + 次数）
+# 数据来源：方案 V6.0 流程表
+budget_data = [
+    {"项目分类": "实验室检查", "项目名称": "血常规/生化/凝血/尿常规", "方案频次": 12, "单价": 300, "备注": "筛选+EOT+每周期给药前"},
+    {"项目分类": "实验室检查", "项目名称": "病毒学(乙肝/丙肝/HIV/梅毒)", "方案频次": 1, "单价": 200, "备注": "仅筛选期"},
+    {"项目分类": "实验室检查", "项目名称": "妊娠检查 (育龄女性)", "方案频次": 10, "单价": 60, "备注": "每次给药前"},
+    {"项目分类": "实验室检查", "项目名称": "甲状腺功能/心肌酶", "方案频次": 10, "单价": 260, "备注": "基线+每周期"},
+    {"项目分类": "影像学评估", "项目名称": "增强CT (胸/腹/盆/颈部)", "方案频次": 5, "单价": 1500, "备注": "每8周评估一次"},
+    {"项目分类": "辅助检查", "项目名称": "12导联心电图 (ECG)", "方案频次": 18, "单价": 40, "备注": "C1D1点位密集"},
+    {"项目分类": "辅助检查", "项目名称": "超声心动图 (ECHO)", "方案频次": 3, "单价": 300, "备注": "基线+随访"},
+    {"项目分类": "手术操作", "项目名称": "肿瘤组织活检 (穿刺及耗材)", "方案频次": 2, "单价": 2000, "备注": "筛选期+给药后"},
+    {"项目分类": "手术操作", "项目名称": "病理组织处理与切片", "方案频次": 2, "单价": 800, "备注": "配合活检"},
+    {"项目分类": "医院端其他", "项目名称": "床位费/诊查费/观察费", "方案频次": 10, "单价": 200, "备注": "按给药频次估算"}
+]
+
+df_base = pd.DataFrame(budget_data)
+
+# 2. 网页交互部分
+st.subheader("🛠️ 第一步：调整各中心单价")
+st.write("请在下方表格的【单价】列直接修改（支持双击编辑），总价将自动更新。")
+
+# 使用 Streamlit 的数据编辑器功能，允许用户修改单价
+edited_df = st.data_editor(
+    df_base,
+    column_config={
+        "单价": st.column_config.NumberColumn("单价 (元)", format="¥%d"),
+        "方案频次": st.column_config.NumberColumn("方案频次 (次)", disabled=True),
+    },
+    disabled=["项目分类", "项目名称", "方案频次", "备注"],
+    hide_index=True,
+    use_container_width=True
+)
+
+# 3. 计算逻辑
+edited_df["项目小计"] = edited_df["方案频次"] * edited_df["单价"]
+total_budget = edited_df["项目小计"].sum()
+
+st.markdown("---")
+st.subheader("📊 第二步：测算结果汇总")
+
+col1, col2 = st.columns(2)
+with col1:
+    st.metric(label="单名受试者（全周期）预计总费用", value=f"¥ {total_budget:,.2f}")
+with col2:
+    patient_count = st.number_input("该中心预计入组人数", value=3, step=1)
+    st.write(f"**该中心项目总预算评估 (检查费):** :red[¥ {total_budget * patient_count:,.2f}]")
+
+# 4. 补充提醒
+with st.expander("📝 预算编制注意事项"):
+    st.write("- **PK/ADA 采样**: 方案中采样点极多，虽然检测费由中心实验室承担，但医院可能收取『采血费』或『样本处理费』。")
+    st.write("- **超量检查**: 若患者出现免疫相关不良反应(irAE)，产生的额外检查费需单独核算。")
+    st.write("- **税费**: 最终合同总额通常需在此基础上增加 6% 左右的税费。")
