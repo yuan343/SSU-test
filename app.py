@@ -94,4 +94,25 @@ for item_idx, item in enumerate(inspection_items):
     
     for label, cyc_val in milestones.items():
         # 次数逻辑计算
-        # 注意：心肌酶等项目在C8后频率
+        # 注意：心肌酶等项目在C8后频率降低，这里做简单线性预估
+        count = int(item.get("基数", item.get("基_数", 0)) + (cyc_val * item.get("系数", item.get("周期系数", 0))))
+        row[f"{label} 次数"] = count
+        row[f"{label} 小计"] = count * current_price
+    
+    comparison_results.append(row)
+
+df_final = pd.DataFrame(comparison_results)
+
+# 4. 展示对比大表
+st.subheader("第二步：全周期费用对比清单 (次数与金额)")
+st.dataframe(df_final, use_container_width=True, hide_index=True)
+
+# 5. 总额统计
+st.divider()
+st.subheader("📊 预算总额概览")
+cols = st.columns(3)
+for i, (label, cyc_val) in enumerate(milestones.items()):
+    total = df_final[f"{label} 小计"].sum()
+    cols[i].metric(label, f"¥ {total:,.2f}")
+
+st.success("💡 建议：合同预算建议按【16周期 (1年)】档位进行编制，以确保长期获益患者无需签署增补协议。")
