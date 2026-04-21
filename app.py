@@ -47,7 +47,6 @@ with t4:
     st.subheader("🤖 文件命名标准化")
     st.write("请将文件重命名为以下格式后再归档：")
     st.code("项目名_中心号_文件类型_版本_日期.pdf", language="text")
-
 import streamlit as st
 import pandas as pd
 
