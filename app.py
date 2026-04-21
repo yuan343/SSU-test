@@ -5,7 +5,7 @@ st.set_page_config(page_title="IMM2510-002 SSU 协同站", layout="wide")
 
 # 侧边栏：完整项目名片
 with st.sidebar:
-    st.title("🏥 项目百科全书")
+    st.title("🏥 项目索引")
     st.success("**方案版本**: V6.0 (2026.03.23)\n\n**IB版本**: V5.0 (IMM2510)")
     st.info("**药物管理点**:\n- 保存: 2-8℃ 避光\n- 配制后室温: 510(8h)/27M(4h)\n- 复溶时间: 约2分40秒")
     st.warning("**中心实验室**:\n- 康维讯 (PK/ADA)\n- 阿克曼 (病理/Biomarker)")
@@ -47,3 +47,19 @@ with t4:
     st.subheader("🤖 文件命名标准化")
     st.write("请将文件重命名为以下格式后再归档：")
     st.code("项目名_中心号_文件类型_版本_日期.pdf", language="text")
+with st.expander("💰 受试者费用一键试算 (分中心自助版)"):
+    st.write("请在下方输入贵中心的医疗项目单价：")
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        price_lab = st.number_input("单次血常规+生化单价 (元)", value=300)
+        price_ct = st.number_input("单次增强CT (多部位) 单价 (元)", value=1200)
+    with col2:
+        price_ecg = st.number_input("单次心电图单价 (元)", value=40)
+        price_biopsy = st.number_input("单次活检穿刺单价 (元)", value=1500)
+
+    # 自动计算逻辑 (按方案V6.0频次)
+    total_cost = (price_lab * 12) + (price_ct * 5) + (price_ecg * 18) + (price_biopsy * 2)
+    
+    st.markdown(f"### 预计单名受试者总检查费用: :red[¥ {total_cost:,.2f}]")
+    st.caption("注：计算逻辑基于方案V6.0预设频次：实验室12次、影像5次、心电图18次、活检2次。")
