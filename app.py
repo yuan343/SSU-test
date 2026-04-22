@@ -61,78 +61,86 @@ with st.sidebar:
 # --- 中间主页面设置 ---
 st.title("📇 IMM2510-002 项目核心通讯录")
 st.write("请点击对应的部门展开人员名单：")
-
 import streamlit as st
 import pandas as pd
 from io import BytesIO
 
-# --- 页面基本配置 ---
+# --- 1. 页面基本配置 (必须放在第一行) ---
 st.set_page_config(page_title="IMM2510-002 SSU工作站", layout="wide")
 
-# --- 1. 数据函数：确保所有明细都在这里 ---
+# --- 2. 数据函数定义 ---
 def get_full_contact_data():
-    # 宜明昂科管理团队全量
+    # 宜明昂科管理团队 (已补全逗号和括号)
     mgmt_data = [
-        ["CMO", "吴诸丽"], ["VP", "周玉斌"],
-        ["PMD", "王琼"], ["PM", "吕志刚"],
-        ["CTA", "马佳怡"], ["项目管理总监", "庞鑫"],
-        ["运营副总监", "邵倩雯"], ["医学副总监", "孙本全"],
-        ["医学总监", "张金超"], ["数据管理经理", "王韵"],
-        ["药物警戒高级经理", "唐田晶"], ["统计师", "任宇铭"]
-        ["临床药理高级经理", "陈杰桃"]
+        ["CMO", "吴诸丽"], ["VP", "周玉斌"], ["PMD", "王琼"], ["PM", "吕志刚"],
+        ["CTA", "马佳怡"], ["项目管理总监", "庞鑫"], ["运营副总监", "邵倩雯"],
+        ["医学副总监", "孙本全"], ["医学总监", "张金超"], ["数据管理经理", "王韵"],
+        ["药物警戒高级经理", "唐田晶"], ["统计师", "任宇铭"], ["临床药理高级经理", "陈杰桃"]
     ]
-    # 研究中心与CRA全量
+    
+    # 研究中心与CRA全量 (已补全逗号)
     cra_data = [
         ["复旦大学附属中山医院", "李銮銮", "19821875816", "luanluan.li@immuneonco.com"],
         ["四川大学华西医院", "邱妍锫", "15390309353", "yanpei.qiu@immuneonco.com"],
-        ["河南肿瘤医院", "李艺雯", "13461035295", "yiwen.li@immuneonco.com"],
-        ["华中科技大学同济医学院附属协和医院", "杨勐", "XXXXX", "XXXX@immuneonco.com"],
+        ["河南省肿瘤医院", "李艺雯", "13461035295", "yiwen.li@immuneonco.com"],
+        ["华中科技大学同济医学院附属协和医院", "杨勐", "待定", "待定"],
         ["吉林大学第一医院", "赵婉霞", "13940406713", "wanxia.zhao@immuneonco.com"],
-        ["河南科技大学第一附属医院", "李艺雯", "13461035295", "yiwen.li@immuneonco.com"]
-        ["福建省肿瘤医院", "陶文静", "18890072100", "wenjing.tao@immuneonco.com"]
-        ["临沂市肿瘤医院", "亢德川", "15617645026", "dechuan.kang@immuneonco.com"]
-        ["南昌大学第一附属医院", "王新鑫", "13974531757", "xinxin.wang@immuneonco.com"]
-        ["湘潭市中心医院", "王新鑫", "13974531757", "xinxin.wang@immuneonco.com"]
-        ["浙江大学医学院附属第二医院", "田甜", "13770991661", "tian.tian@immuneonco.com"]
-        ["郑州大学第一附属医院", "杨洋", "13681047537", "yang.yang@immuneonco.com"]
-        ["大连大学附属中山医院", "赵婉霞", "13940406713", "wanxia.zhao@immuneonco.com"]
-        ["河南省人民医院", "杨洋", "13681047537", "yang.yang@immuneonco.com"]
-        ["西安交通大学第一附属医院", "韩旭", "15701197417", "xu.han@immuneonco.com"] 
-        ["河北医科大学第四医院", "马慧子", "XXXX", "XXXX@immuneonco.com"]
-        ["山西省肿瘤医院", "马慧子", "XXXX", "XXXX@immuneonco.com"]
-        ["山东大学齐鲁医院", "谢明明", "XXXX", "XXXX@immuneonco.com"]
+        ["河南科技大学第一附属医院", "李艺雯", "13461035295", "yiwen.li@immuneonco.com"],
+        ["福建省肿瘤医院", "陶文静", "18890072100", "wenjing.tao@immuneonco.com"],
+        ["临沂市肿瘤医院", "亢德川", "15617645026", "dechuan.kang@immuneonco.com"],
+        ["南昌大学第一附属医院", "王新鑫", "13974531757", "xinxin.wang@immuneonco.com"],
+        ["湘潭市中心医院", "王新鑫", "13974531757", "xinxin.wang@immuneonco.com"],
+        ["浙江大学医学院附属第二医院", "田甜", "13770991661", "tian.tian@immuneonco.com"],
+        ["郑州大学第一附属医院", "杨洋", "13681047537", "yang.yang@immuneonco.com"],
+        ["大连大学附属中山医院", "赵婉霞", "13940406713", "wanxia.zhao@immuneonco.com"],
+        ["河南省人民医院", "杨洋", "13681047537", "yang.yang@immuneonco.com"],
+        ["西安交通大学第一附属医院", "韩旭", "15701197417", "xu.han@immuneonco.com"],
+        ["河北医科大学第四医院", "马慧子", "待定", "待定"],
+        ["山西省肿瘤医院", "马慧子", "待定", "待定"],
+        ["山东大学齐鲁医院", "谢明明", "待定", "待定"],
         ["北京胸科医院", "韩旭", "15701197417", "xu.han@immuneonco.com"]
     ]
-    # SMO (津石) SSU CRC全量
+    
+    # SMO (津石) 团队 (已补全逗号)
     smo_data = [
-        ["复旦大学附属中山医院", "XXX", "XXX", "XXX@wuxiapptec.com"],
+        ["复旦大学附属中山医院", "待定", "待定", "待定"],
         ["河南科技大学第一附属医院", "杨洁", "13633893896", "yang_jie0108@wuxiapptec.com"],
         ["临沂市肿瘤医院", "李春潇", "18865490982", "li_chunxiao0101@wuxiapptec.com"],
         ["南昌大学第一附属医院", "余红梅", "18279539445", "yu_hongmei0701@wuxiapptec.com"],
         ["湘潭市中心医院", "陈玉玲", "15573214901", "chen_yuling@wuxiapptec.com"],
         ["浙江大学医学院附属第二医院", "蔡晶晶", "18329107307", "cai_jingjing@wuxiapptec.com"],
-        ["湖南省肿瘤医院", "贺冬雪", "15580676917", "he_dongxue@wuxiapptec.com"]
-        ["郑州大学第一附属医院", "韩璐悦", "15580676917", "han_luyue@wuxiapptec.com"]
-        ["河南省人民医院", "党梦平", "15517818526", "dang_mengping@wuxiapptec.com"]
-        ["西安交通大学第一附属医院", "王乐", "19916405427", "wang_le0701@wuxiapptec.com"]
-        ["山西省肿瘤医院", "魏佳琪", "18834152547", "wei_jiaqi@wuxiapptec.com"]
-        ["北京胸科医院", "杜佳睿", "15042590066","du_jiarui@wuxiapptec.com"]
+        ["湖南省肿瘤医院", "贺冬雪", "15580676917", "he_dongxue@wuxiapptec.com"],
+        ["郑州大学第一附属医院", "韩璐悦", "15580676917", "han_luyue@wuxiapptec.com"],
+        ["河南省人民医院", "党梦平", "15517818526", "dang_mengping@wuxiapptec.com"],
+        ["西安交通大学第一附属医院", "王乐", "19916405427", "wang_le0701@wuxiapptec.com"],
+        ["山西省肿瘤医院", "魏佳琪", "18834152547", "wei_jiaqi@wuxiapptec.com"],
+        ["北京胸科医院", "杜佳睿", "15042590066", "du_jiarui@wuxiapptec.com"]
     ]
     return mgmt_data, cra_data, smo_data
 
-# --- 2. 左侧边栏导航 ---
+def get_file_tracker_data():
+    file_data = [
+        {"编号": "01", "分类": "申办方/CDE/方案", "文档名称": "临床试验方案 (Protocol V6.0)", "状态": "✅ 已获批", "备注": "最新版"},
+        {"编号": "02", "分类": "申办方/CDE/方案", "文档名称": "CDE 受理通知书", "状态": "✅ 已获取", "备注": "-"},
+        {"编号": "09", "分类": "IB/COA/监查计划", "文档名称": "研究者手册 (IB V5.0)", "状态": "⏳ 待更新", "备注": "预计下周更新"},
+        {"编号": "17", "分类": "保险/授权/名单", "文档名称": "临床试验保险单", "状态": "✅ 已扩展37例", "备注": "-"},
+        {"编号": "25", "分类": "使用手册/资质执照", "文档名称": "生产许可证/资质执照", "状态": "✅ 已补齐", "备注": "-"},
+    ]
+    return pd.DataFrame(file_data)
+
+# --- 3. 左侧边栏导航 ---
 with st.sidebar:
+    st.title("🚀 SSU 数字化管理")
     menu = st.selectbox("功能切换", ["项目全量通讯录", "文件 Tracker", "访视明细(一事一行)"])
     st.divider()
     st.caption("版本：V1.0 (2026-04-22)")
 
-# --- 3. 中间页面逻辑 ---
-
+# --- 4. 中间主页面逻辑 ---
 if menu == "项目全量通讯录":
-    st.header("📇 项目核心通讯录 (全量版)")
+    st.title("📇 IMM2510-002 项目核心通讯录")
+    st.write("请点击对应的部门展开人员名单：")
     mgmt, cra, smo = get_full_contact_data()
     
-    # 使用 Tabs 减少垂直空间占用，防止显示不全
     t1, t2, t3, t4 = st.tabs(["申办方管理团队", "研究中心 & CRA", "SMO 团队", "其他供应商"])
     
     with t1:
@@ -162,54 +170,33 @@ if menu == "项目全量通讯录":
             st.write("🛡️ 保险公司: 华泰财产保险有限公司")
 
 elif menu == "文件 Tracker":
-    st.header("📂 启动包文件 Tracker (38项)")
-    # 此处放置您之前确定的 Tracker 逻辑
-    st.write("正在追踪 38 项核心文件进度...")
+    st.title("📂 IMM2510-002 SSU 文件 Tracker")
+    df_tracker = get_file_tracker_data()
+    
+    search_query = st.text_input("🔍 搜索文档名称或编号", "")
+    if search_query:
+        df_tracker = df_tracker[df_tracker['文档名称'].str.contains(search_query) | df_tracker['编号'].str.contains(search_query)]
+
+    st.dataframe(
+        df_tracker,
+        use_container_width=True,
+        column_config={
+            "状态": st.column_config.SelectboxColumn(
+                "最新状态",
+                options=["✅ 已获取", "⏳ 待更新", "❌ 缺失", "⚠️ 待盖章"],
+                required=True,
+            )
+        },
+        hide_index=True,
+    )
+    
+    st.divider()
+    col1, col2, col3 = st.columns(3)
+    col1.metric("总文档数", "38")
+    col2.metric("已完成", "32", delta="2 (本周)")
+    col3.metric("待跟进", "6", delta="-1", delta_color="inverse")
 
 elif menu == "访视明细(一事一行)":
-    st.header("📊 访视动作流水账 (无单价版)")
-    # 这里放之前为您生成的“一事一行”不含费用的 Excel 逻辑
-    st.write("此处可放置下载按钮，直接下载全量 Excel 表格。")
-
-# 1. 定义 Tracker 数据
-def get_file_tracker_data():
-    file_data = [
-        {"编号": "01", "分类": "申办方/CDE/方案", "文档名称": "临床试验方案 (Protocol V6.0)", "状态": "✅ 已获批", "备注": "最新版"},
-        {"编号": "02", "分类": "申办方/CDE/方案", "文档名称": "CDE 受理通知书", "状态": "✅ 已获取", "备注": "-"},
-        {"编号": "09", "分类": "IB/COA/监查计划", "文档名称": "研究者手册 (IB V5.0)", "状态": "⏳ 待更新", "备注": "预计下周更新"},
-        {"编号": "17", "分类": "保险/授权/名单", "文档名称": "临床试验保险单", "状态": "✅ 已扩展37例", "备注": "-"},
-        {"编号": "25", "分类": "使用手册/资质执照", "文档名称": "生产许可证/资质执照", "状态": "✅ 已补齐", "备注": "-"},
-    ]
-    return pd.DataFrame(file_data)
-
-# 2. 页面展示逻辑
-st.title("📂 IMM2510-002 SSU 文件 Tracker")
-
-# 使用交互式表格展示 Tracker
-df_tracker = get_file_tracker_data()
-
-# 增加搜索和过滤功能
-search_query = st.text_input("🔍 搜索文档名称或编号", "")
-if search_query:
-    df_tracker = df_tracker[df_tracker['文档名称'].str.contains(search_query) | df_tracker['编号'].str.contains(search_query)]
-
-# 渲染 Tracker 表格
-st.dataframe(
-    df_tracker,
-    use_container_width=True,
-    column_config={
-        "状态": st.column_config.SelectboxColumn(
-            "最新状态",
-            options=["✅ 已获取", "⏳ 待更新", "❌ 缺失", "⚠️ 待盖章"],
-            required=True,
-        )
-    },
-    hide_index=True,
-)
-
-# 3. 进度统计摘要
-st.divider()
-col1, col2, col3 = st.columns(3)
-col1.metric("总文档数", "38")
-col2.metric("已完成", "32", delta="2 (本周)")
-col3.metric("待跟进", "6", delta="-1", delta_color="inverse")
+    st.title("📊 访视动作流水账")
+    st.info("此处展示 C1-C8 的极致平铺流水账...")
+    # 可在此处添加之前的访视逻辑代码
