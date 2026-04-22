@@ -73,38 +73,55 @@ st.set_page_config(page_title="IMM2510-002 SSU工作站", layout="wide")
 def get_full_contact_data():
     # 宜明昂科管理团队全量
     mgmt_data = [
-        ["CMO", "吴诸丽", "-", "-"], ["VP", "周玉斌", "-", "-"],
-        ["PMD", "王琼", "-", "-"], ["PM", "吕志刚", "13764295352", "zhigang.lv@immuneonco.com"],
-        ["CTA", "马佳怡", "18601636864", "jiayi.ma@immuneonco.com"], ["项目管理总监", "庞鑫", "-", "-"],
-        ["运营副总监", "邵倩雯", "-", "-"], ["资深总监", "景德强", "-", "-"],
-        ["医学总监", "张金超", "-", "-"], ["数据管理总监", "棘玉荣", "-", "-"],
-        ["药物警戒总监", "潘萍", "-", "-"], ["统计师", "任宇铭", "-", "-"]
+        ["CMO", "吴诸丽"], ["VP", "周玉斌"],
+        ["PMD", "王琼"], ["PM", "吕志刚"],
+        ["CTA", "马佳怡"], ["项目管理总监", "庞鑫"],
+        ["运营副总监", "邵倩雯"], ["医学副总监", "孙本全"],
+        ["医学总监", "张金超"], ["数据管理经理", "王韵"],
+        ["药物警戒高级经理", "唐田晶"], ["统计师", "任宇铭"]
+        ["临床药理高级经理", "陈杰桃"]
     ]
     # 研究中心与CRA全量
     cra_data = [
-        ["复旦中山", "李銮銮", "19821875816", "luanluan.li@immuneonco.com", "上海"],
-        ["四川华西", "邱妍锫", "15390309353", "yanpei.qiu@immuneonco.com", "成都"],
-        ["河南肿瘤", "李艺雯", "13461035295", "yiwen.li@immuneonco.com", "郑州"],
-        ["华西(另一职责)", "邱妍锫", "15390309353", "yanpei.qiu@immuneonco.com", "成都"],
-        ["浙大二院", "蔡晶晶", "18329107307", "cai_jingjing@wuxiapptec.com", "杭州"],
-        ["湖南肿瘤", "贺冬雪", "15580676917", "he_dongxue@wuxiapptec.com", "长沙"]
+        ["复旦大学附属中山医院", "李銮銮", "19821875816", "luanluan.li@immuneonco.com"],
+        ["四川大学华西医院", "邱妍锫", "15390309353", "yanpei.qiu@immuneonco.com"],
+        ["河南肿瘤医院", "李艺雯", "13461035295", "yiwen.li@immuneonco.com"],
+        ["华中科技大学同济医学院附属协和医院", "杨勐", "XXXXX", "XXXX@immuneonco.com"],
+        ["吉林大学第一医院", "赵婉霞", "13940406713", "wanxia.zhao@immuneonco.com"],
+        ["河南科技大学第一附属医院", "李艺雯", "13461035295", "yiwen.li@immuneonco.com"]
+        ["福建省肿瘤医院", "陶文静", "18890072100", "wenjing.tao@immuneonco.com"]
+        ["临沂市肿瘤医院", "亢德川", "15617645026", "dechuan.kang@immuneonco.com"]
+        ["南昌大学第一附属医院", "王新鑫", "13974531757", "xinxin.wang@immuneonco.com"]
+        ["湘潭市中心医院", "王新鑫", "13974531757", "xinxin.wang@immuneonco.com"]
+        ["浙江大学医学院附属第二医院", "田甜", "13770991661", "tian.tian@immuneonco.com"]
+        ["郑州大学第一附属医院", "杨洋", "13681047537", "yang.yang@immuneonco.com"]
+        ["大连大学附属中山医院", "赵婉霞", "13940406713", "wanxia.zhao@immuneonco.com"]
+        ["河南省人民医院", "杨洋", "13681047537", "yang.yang@immuneonco.com"]
+        ["西安交通大学第一附属医院", "韩旭", "15701197417", "xu.han@immuneonco.com"] 
+        ["河北医科大学第四医院", "马慧子", "XXXX", "XXXX@immuneonco.com"]
+        ["山西省肿瘤医院", "马慧子", "XXXX", "XXXX@immuneonco.com"]
+        ["山东大学齐鲁医院", "谢明明", "XXXX", "XXXX@immuneonco.com"]
+        ["北京胸科医院", "韩旭", "15701197417", "xu.han@immuneonco.com"]
     ]
     # SMO (津石) SSU CRC全量
     smo_data = [
-        ["09", "河科大一附院", "杨洁", "13633893896", "yang_jie0108@wuxiapptec.com"],
-        ["11", "临沂市肿瘤", "李春潇", "18865490982", "li_chunxiao0101@wuxiapptec.com"],
-        ["12", "南昌一附院", "余红梅", "18279539445", "yu_hongmei0701@wuxiapptec.com"],
-        ["13", "湘潭市中心", "陈玉玲", "15573214901", "chen_yuling@wuxiapptec.com"],
-        ["14", "浙大二院", "蔡晶晶", "18329107307", "cai_jingjing@wuxiapptec.com"],
-        ["15", "湖南省肿瘤", "贺冬雪", "15580676917", "he_dongxue@wuxiapptec.com"]
+        ["复旦大学附属中山医院", "XXX", "XXX", "XXX@wuxiapptec.com"],
+        ["河南科技大学第一附属医院", "杨洁", "13633893896", "yang_jie0108@wuxiapptec.com"],
+        ["临沂市肿瘤医院", "李春潇", "18865490982", "li_chunxiao0101@wuxiapptec.com"],
+        ["南昌大学第一附属医院", "余红梅", "18279539445", "yu_hongmei0701@wuxiapptec.com"],
+        ["湘潭市中心医院", "陈玉玲", "15573214901", "chen_yuling@wuxiapptec.com"],
+        ["浙江大学医学院附属第二医院", "蔡晶晶", "18329107307", "cai_jingjing@wuxiapptec.com"],
+        ["湖南省肿瘤医院", "贺冬雪", "15580676917", "he_dongxue@wuxiapptec.com"]
+        ["郑州大学第一附属医院", "韩璐悦", "15580676917", "han_luyue@wuxiapptec.com"]
+        ["河南省人民医院", "党梦平", "15517818526", "dang_mengping@wuxiapptec.com"]
+        ["西安交通大学第一附属医院", "王乐", "19916405427", "wang_le0701@wuxiapptec.com"]
+        ["山西省肿瘤医院", "魏佳琪", "18834152547", wei_jiaqi@wuxiapptec.com"]
+        ["北京胸科医院", "杜佳睿", "15042590066", du_jiarui@wuxiapptec.com"]
     ]
     return mgmt_data, cra_data, smo_data
 
 # --- 2. 左侧边栏导航 ---
 with st.sidebar:
-    st.title("🚀 SSU 数字化看板")
-    st.info("📅 **项目周会：每周五 14:00**")
-    st.divider()
     menu = st.selectbox("功能切换", ["项目全量通讯录", "文件 Tracker", "访视明细(一事一行)"])
     st.divider()
     st.caption("版本：V1.0 (2026-04-22)")
@@ -116,21 +133,21 @@ if menu == "项目全量通讯录":
     mgmt, cra, smo = get_full_contact_data()
     
     # 使用 Tabs 减少垂直空间占用，防止显示不全
-    t1, t2, t3, t4 = st.tabs(["申办方管理团队", "研究中心 & CRA", "SMO (津石) 团队", "其他供应商"])
+    t1, t2, t3, t4 = st.tabs(["申办方管理团队", "研究中心 & CRA", "SMO 团队", "其他供应商"])
     
     with t1:
         st.subheader("宜明昂科 - 项目管理团队")
-        df_mgmt = pd.DataFrame(mgmt, columns=["职位", "姓名", "电话", "邮箱"])
+        df_mgmt = pd.DataFrame(mgmt, columns=["职位", "姓名"])
         st.dataframe(df_mgmt, use_container_width=True, hide_index=True)
         
     with t2:
         st.subheader("CRA 区域负责明细")
-        df_cra = pd.DataFrame(cra, columns=["中心名称", "CRA姓名", "电话", "邮箱", "驻地"])
+        df_cra = pd.DataFrame(cra, columns=["中心名称", "CRA姓名", "电话", "邮箱"])
         st.table(df_cra)
         
     with t3:
         st.subheader("津石 - SSU CRC 联络表")
-        df_smo = pd.DataFrame(smo, columns=["中心编号", "中心名称", "SSU CRC", "电话", "邮箱"])
+        df_smo = pd.DataFrame(smo, columns=["中心名称", "SSU CRC", "电话", "邮箱"])
         st.dataframe(df_smo, use_container_width=True, hide_index=True)
         
     with t4:
