@@ -59,8 +59,6 @@ with st.sidebar:
     st.write("💡 提示：点击中间页面的各部门标签即可查看人员联系方式。")
 
 # --- 中间主页面设置 ---
-st.title("📇 IMM2510-002 项目核心通讯录")
-st.write("请点击对应的部门展开人员名单：")
 import streamlit as st
 import pandas as pd
 from io import BytesIO
