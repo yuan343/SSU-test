@@ -7,12 +7,9 @@ st.set_page_config(page_title="IMM2510-002 SSU 协同站", layout="wide")
 with st.sidebar:
     st.title("🏥 项目索引")
     st.success("**方案版本**: V6.0 (2026.03.23)\n\n**IB版本**: V5.0 (IMM2510)")
-    st.info("**药物管理点**:\n- 保存: 2-8℃ 避光\n- 配制后室温: 510(8h)/27M(4h)\n- 复溶时间: 约2分40秒")
-    st.warning("**中心实验室**:\n- 康维讯 (PK/ADA)\n- 阿克曼 (病理/Biomarker)")
-    st.error("**保险有效期**:\n- 至 2027-05-30\n- 已覆盖20家中心")
 # 核心模块：项目会信息
     st.subheader("📅 项目会信息")
-    st.info("⏰ **每周五 14:00**\n\n项目周会 (SSU/临床运营)")
+    st.info("⏰ **每周五 14:00**\n\n项目周会 (临床运营)")
 
 st.title("🚀 IMM2510-002 临床试验快速启动站")
 st.markdown("---")
