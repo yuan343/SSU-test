@@ -62,40 +62,97 @@ with st.sidebar:
 st.title("📇 IMM2510-002 项目核心通讯录")
 st.write("请点击对应的部门展开人员名单：")
 
-# 1. 申办方 - 宜明昂科
-with st.expander("🏢 申办方 (ImmuneOnco)"):
-    df_sponsor = pd.DataFrame([
-        {"姓名": "王琼", "职位": "项目总监 (PMD)", "联系方式": "138-xxxx-xxxx", "邮箱": "zhangsan@immuneonco.com"},
-        {"姓名": "吕志刚", "职位": "项目经理 (Medical)", "联系方式": "139-xxxx-xxxx", "邮箱": "lisi@immuneonco.com"},
-        {"姓名": "XXX", "职位": "医学 (Medical)", "联系方式": "139-xxxx-xxxx", "邮箱": "lisi@immuneonco.com"}
-    ])
-    st.table(df_sponsor)
-
-# 2. SMO - 津石
-with st.expander("🤝  SMO (CRC)"):
-    df_cro = pd.DataFrame([
-        {"姓名": "王五", "职位": "SSU 负责人", "联系方式": "137-xxxx-xxxx", "邮箱": "wangwu@gemstone.com"},
-        {"姓名": "赵六", "职位": "区域监查经理 (CRM)", "联系方式": "136-xxxx-xxxx", "邮箱": "zhaoliu@gemstone.com"},
-        {"姓名": "各中心 CRC", "职位": "现场协调员", "联系方式": "见各中心子目录", "邮箱": "-"}
-    ])
-    st.table(df_cro)
-
-# 3. 中心实验室 - 康维讯 & 阿克曼
-with st.expander("🔬 中心实验室 (Lab Support)"):
-    df_lab = pd.DataFrame([
-        {"机构": "康维讯 (KangaBio)", "对接项目": "PK/ADA 样本转运", "联系电话": "400-xxx-xxxx", "备注": "负责样本箱申领"},
-        {"机构": "阿克曼 (Ackerman)", "对接项目": "组织切片/Biomarker", "联系电话": "021-xxxx-xxxx", "备注": "负责切片回寄"}
-    ])
-    st.table(df_lab)
-
-# 4. 冷链物流 - 药运/样运
-with st.expander("🚚 物流供应商 (Logistics)"):
-    st.write("**顺丰医药**: 95338 (备注：IMM2510月结账号 XXXX)")
-    st.write("**专业冷链**: 400-xxx-xxxx (负责 2-8℃ 样本回寄)")
-
-st.success("📝 建议：如人员有变动，请及时联系 SSU 经理更新，以防由于联系不畅导致资料递交延误。")
 import streamlit as st
 import pandas as pd
+from io import BytesIO
+
+# --- 页面基本配置 ---
+st.set_page_config(page_title="IMM2510-002 SSU工作站", layout="wide")
+
+# --- 1. 数据函数：确保所有明细都在这里 ---
+def get_full_contact_data():
+    # 宜明昂科管理团队全量
+    mgmt_data = [
+        ["CMO", "吴诸丽", "-", "-"], ["VP", "周玉斌", "-", "-"],
+        ["PMD", "王琼", "-", "-"], ["PM", "吕志刚", "13764295352", "zhigang.lv@immuneonco.com"],
+        ["CTA", "马佳怡", "18601636864", "jiayi.ma@immuneonco.com"], ["项目管理总监", "庞鑫", "-", "-"],
+        ["运营副总监", "邵倩雯", "-", "-"], ["资深总监", "景德强", "-", "-"],
+        ["医学总监", "张金超", "-", "-"], ["数据管理总监", "棘玉荣", "-", "-"],
+        ["药物警戒总监", "潘萍", "-", "-"], ["统计师", "任宇铭", "-", "-"]
+    ]
+    # 研究中心与CRA全量
+    cra_data = [
+        ["复旦中山", "李銮銮", "19821875816", "luanluan.li@immuneonco.com", "上海"],
+        ["四川华西", "邱妍锫", "15390309353", "yanpei.qiu@immuneonco.com", "成都"],
+        ["河南肿瘤", "李艺雯", "13461035295", "yiwen.li@immuneonco.com", "郑州"],
+        ["华西(另一职责)", "邱妍锫", "15390309353", "yanpei.qiu@immuneonco.com", "成都"],
+        ["浙大二院", "蔡晶晶", "18329107307", "cai_jingjing@wuxiapptec.com", "杭州"],
+        ["湖南肿瘤", "贺冬雪", "15580676917", "he_dongxue@wuxiapptec.com", "长沙"]
+    ]
+    # SMO (津石) SSU CRC全量
+    smo_data = [
+        ["09", "河科大一附院", "杨洁", "13633893896", "yang_jie0108@wuxiapptec.com"],
+        ["11", "临沂市肿瘤", "李春潇", "18865490982", "li_chunxiao0101@wuxiapptec.com"],
+        ["12", "南昌一附院", "余红梅", "18279539445", "yu_hongmei0701@wuxiapptec.com"],
+        ["13", "湘潭市中心", "陈玉玲", "15573214901", "chen_yuling@wuxiapptec.com"],
+        ["14", "浙大二院", "蔡晶晶", "18329107307", "cai_jingjing@wuxiapptec.com"],
+        ["15", "湖南省肿瘤", "贺冬雪", "15580676917", "he_dongxue@wuxiapptec.com"]
+    ]
+    return mgmt_data, cra_data, smo_data
+
+# --- 2. 左侧边栏导航 ---
+with st.sidebar:
+    st.title("🚀 SSU 数字化看板")
+    st.info("📅 **项目周会：每周五 14:00**")
+    st.divider()
+    menu = st.selectbox("功能切换", ["项目全量通讯录", "文件 Tracker", "访视明细(一事一行)"])
+    st.divider()
+    st.caption("版本：V1.0 (2026-04-22)")
+
+# --- 3. 中间页面逻辑 ---
+
+if menu == "项目全量通讯录":
+    st.header("📇 项目核心通讯录 (全量版)")
+    mgmt, cra, smo = get_full_contact_data()
+    
+    # 使用 Tabs 减少垂直空间占用，防止显示不全
+    t1, t2, t3, t4 = st.tabs(["申办方管理团队", "研究中心 & CRA", "SMO (津石) 团队", "其他供应商"])
+    
+    with t1:
+        st.subheader("宜明昂科 - 项目管理团队")
+        df_mgmt = pd.DataFrame(mgmt, columns=["职位", "姓名", "电话", "邮箱"])
+        st.dataframe(df_mgmt, use_container_width=True, hide_index=True)
+        
+    with t2:
+        st.subheader("CRA 区域负责明细")
+        df_cra = pd.DataFrame(cra, columns=["中心名称", "CRA姓名", "电话", "邮箱", "驻地"])
+        st.table(df_cra)
+        
+    with t3:
+        st.subheader("津石 - SSU CRC 联络表")
+        df_smo = pd.DataFrame(smo, columns=["中心编号", "中心名称", "SSU CRC", "电话", "邮箱"])
+        st.dataframe(df_smo, use_container_width=True, hide_index=True)
+        
+    with t4:
+        col_l, col_r = st.columns(2)
+        with col_l:
+            st.markdown("**中心实验室**")
+            st.write("🧪 康维讯 PM: 赵娟 | 15996268113")
+            st.write("🔬 阿克曼 PM: 任卫 | 17621905332")
+        with col_r:
+            st.markdown("**物流与保险**")
+            st.write("🚚 生生物流紧急联系人: 王金麟 | 15821381794")
+            st.write("🛡️ 保险公司: 华泰财产保险有限公司")
+
+elif menu == "文件 Tracker":
+    st.header("📂 启动包文件 Tracker (38项)")
+    # 此处放置您之前确定的 Tracker 逻辑
+    st.write("正在追踪 38 项核心文件进度...")
+
+elif menu == "访视明细(一事一行)":
+    st.header("📊 访视动作流水账 (无单价版)")
+    # 这里放之前为您生成的“一事一行”不含费用的 Excel 逻辑
+    st.write("此处可放置下载按钮，直接下载全量 Excel 表格。")
 
 # 1. 定义 Tracker 数据
 def get_file_tracker_data():
