@@ -94,3 +94,48 @@ with st.expander("🚚 物流供应商 (Logistics)"):
     st.write("**专业冷链**: 400-xxx-xxxx (负责 2-8℃ 样本回寄)")
 
 st.success("📝 建议：如人员有变动，请及时联系 SSU 经理更新，以防由于联系不畅导致资料递交延误。")
+import streamlit as st
+import pandas as pd
+
+# 1. 定义 Tracker 数据
+def get_file_tracker_data():
+    file_data = [
+        {"编号": "01", "分类": "申办方/CDE/方案", "文档名称": "临床试验方案 (Protocol V6.0)", "状态": "✅ 已获批", "备注": "最新版"},
+        {"编号": "02", "分类": "申办方/CDE/方案", "文档名称": "CDE 受理通知书", "状态": "✅ 已获取", "备注": "-"},
+        {"编号": "09", "分类": "IB/COA/监查计划", "文档名称": "研究者手册 (IB V5.0)", "状态": "⏳ 待更新", "备注": "预计下周更新"},
+        {"编号": "17", "分类": "保险/授权/名单", "文档名称": "临床试验保险单", "状态": "✅ 已扩展37例", "备注": "-"},
+        {"编号": "25", "分类": "使用手册/资质执照", "文档名称": "生产许可证/资质执照", "状态": "✅ 已补齐", "备注": "-"},
+    ]
+    return pd.DataFrame(file_data)
+
+# 2. 页面展示逻辑
+st.title("📂 IMM2510-002 SSU 文件 Tracker")
+
+# 使用交互式表格展示 Tracker
+df_tracker = get_file_tracker_data()
+
+# 增加搜索和过滤功能
+search_query = st.text_input("🔍 搜索文档名称或编号", "")
+if search_query:
+    df_tracker = df_tracker[df_tracker['文档名称'].str.contains(search_query) | df_tracker['编号'].str.contains(search_query)]
+
+# 渲染 Tracker 表格
+st.dataframe(
+    df_tracker,
+    use_container_width=True,
+    column_config={
+        "状态": st.column_config.SelectboxColumn(
+            "最新状态",
+            options=["✅ 已获取", "⏳ 待更新", "❌ 缺失", "⚠️ 待盖章"],
+            required=True,
+        )
+    },
+    hide_index=True,
+)
+
+# 3. 进度统计摘要
+st.divider()
+col1, col2, col3 = st.columns(3)
+col1.metric("总文档数", "38")
+col2.metric("已完成", "32", delta="2 (本周)")
+col3.metric("待跟进", "6", delta="-1", delta_color="inverse")
