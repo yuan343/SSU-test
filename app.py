@@ -115,8 +115,8 @@ def get_full_contact_data():
         ["郑州大学第一附属医院", "韩璐悦", "15580676917", "han_luyue@wuxiapptec.com"]
         ["河南省人民医院", "党梦平", "15517818526", "dang_mengping@wuxiapptec.com"]
         ["西安交通大学第一附属医院", "王乐", "19916405427", "wang_le0701@wuxiapptec.com"]
-        ["山西省肿瘤医院", "魏佳琪", "18834152547", wei_jiaqi@wuxiapptec.com"]
-        ["北京胸科医院", "杜佳睿", "15042590066", du_jiarui@wuxiapptec.com"]
+        ["山西省肿瘤医院", "魏佳琪", "18834152547", "wei_jiaqi@wuxiapptec.com"]
+        ["北京胸科医院", "杜佳睿", "15042590066","du_jiarui@wuxiapptec.com"]
     ]
     return mgmt_data, cra_data, smo_data
 
