@@ -47,3 +47,49 @@ with t4:
     st.subheader("🤖 文件命名标准化")
     st.write("请将文件重命名为以下格式后再归档：")
     st.code("项目名_中心号_文件类型_版本_日期.pdf", language="text")
+import streamlit as st
+import pandas as pd
+
+# --- 左侧侧边栏设置 ---
+with st.sidebar:
+    st.title("📂 功能导航")
+    # 这里是你的其他功能，比如 SSU 资料、费用测算等
+    st.info("当前页面：项目通讯录")
+    st.markdown("---")
+    st.write("💡 提示：点击中间页面的各部门标签即可查看人员联系方式。")
+
+# --- 中间主页面设置 ---
+st.title("📇 IMM2510-002 项目核心通讯录")
+st.write("请点击对应的部门展开人员名单：")
+
+# 1. 申办方 - 宜明昂科
+with st.expander("🏢 申办方 (ImmuneOnco)"):
+    df_sponsor = pd.DataFrame([
+        {"姓名": "张三", "职位": "项目总监 (PD)", "联系方式": "138-xxxx-xxxx", "邮箱": "zhangsan@immuneonco.com"},
+        {"姓名": "李四", "职位": "医学经理 (Medical)", "联系方式": "139-xxxx-xxxx", "邮箱": "lisi@immuneonco.com"}
+    ])
+    st.table(df_sponsor)
+
+# 2. CRO & SMO - 津石 (Gemstone)
+with st.expander("🤝 CRO & SMO (监查/启动/CRC)"):
+    df_cro = pd.DataFrame([
+        {"姓名": "王五", "职位": "SSU 负责人", "联系方式": "137-xxxx-xxxx", "邮箱": "wangwu@gemstone.com"},
+        {"姓名": "赵六", "职位": "区域监查经理 (CRM)", "联系方式": "136-xxxx-xxxx", "邮箱": "zhaoliu@gemstone.com"},
+        {"姓名": "各中心 CRC", "职位": "现场协调员", "联系方式": "见各中心子目录", "邮箱": "-"}
+    ])
+    st.table(df_cro)
+
+# 3. 中心实验室 - 康维讯 & 阿克曼
+with st.expander("🔬 中心实验室 (Lab Support)"):
+    df_lab = pd.DataFrame([
+        {"机构": "康维讯 (KangaBio)", "对接项目": "PK/ADA 样本转运", "联系电话": "400-xxx-xxxx", "备注": "负责样本箱申领"},
+        {"机构": "阿克曼 (Ackerman)", "对接项目": "组织切片/Biomarker", "联系电话": "021-xxxx-xxxx", "备注": "负责切片回寄"}
+    ])
+    st.table(df_lab)
+
+# 4. 冷链物流 - 药运/样运
+with st.expander("🚚 物流供应商 (Logistics)"):
+    st.write("**顺丰医药**: 95338 (备注：IMM2510月结账号 XXXX)")
+    st.write("**专业冷链**: 400-xxx-xxxx (负责 2-8℃ 样本回寄)")
+
+st.success("📝 建议：如人员有变动，请及时联系 SSU 经理更新，以防由于联系不畅导致资料递交延误。")
