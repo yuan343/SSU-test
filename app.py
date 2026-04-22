@@ -65,13 +65,14 @@ st.write("请点击对应的部门展开人员名单：")
 # 1. 申办方 - 宜明昂科
 with st.expander("🏢 申办方 (ImmuneOnco)"):
     df_sponsor = pd.DataFrame([
-        {"姓名": "张三", "职位": "项目总监 (PD)", "联系方式": "138-xxxx-xxxx", "邮箱": "zhangsan@immuneonco.com"},
-        {"姓名": "李四", "职位": "医学经理 (Medical)", "联系方式": "139-xxxx-xxxx", "邮箱": "lisi@immuneonco.com"}
+        {"姓名": "王琼", "职位": "项目总监 (PMD)", "联系方式": "138-xxxx-xxxx", "邮箱": "zhangsan@immuneonco.com"},
+        {"姓名": "吕志刚", "职位": "项目经理 (Medical)", "联系方式": "139-xxxx-xxxx", "邮箱": "lisi@immuneonco.com"},
+        {"姓名": "XXX", "职位": "医学 (Medical)", "联系方式": "139-xxxx-xxxx", "邮箱": "lisi@immuneonco.com"}
     ])
     st.table(df_sponsor)
 
-# 2. CRO & SMO - 津石 (Gemstone)
-with st.expander("🤝 CRO & SMO (监查/启动/CRC)"):
+# 2. SMO - 津石
+with st.expander("🤝  SMO (CRC)"):
     df_cro = pd.DataFrame([
         {"姓名": "王五", "职位": "SSU 负责人", "联系方式": "137-xxxx-xxxx", "邮箱": "wangwu@gemstone.com"},
         {"姓名": "赵六", "职位": "区域监查经理 (CRM)", "联系方式": "136-xxxx-xxxx", "邮箱": "zhaoliu@gemstone.com"},
